@@ -16,7 +16,7 @@ export default function GetPost({isAuth, setAlert}) {
       navigate('/login');
     }
     const getBlog = async()=>{
-      let questionsApi = `http://localhost:3000/blog/${location.pathname.replace("getpost/", "getBlog/")}`;
+      let questionsApi = `https://oneshot-backend.onrender.com/blog/${location.pathname.replace("getpost/", "getBlog/")}`;
       let questionsData = await fetch(questionsApi);
       let jsonQuestionsData = await questionsData.json();
       setBlog(jsonQuestionsData);
@@ -31,7 +31,7 @@ export default function GetPost({isAuth, setAlert}) {
         if(userData.userPriority>1){
           setAlert("Wait...", "info");
 
-          const blogApi=`http://localhost:3000/blog/deleteBlog/${docId}`;
+          const blogApi=`https://oneshot-backend.onrender.com/blog/deleteBlog/${docId}`;
         
           const requestOptions = {
               method: 'DELETE',

@@ -56,7 +56,7 @@ export default function AddPost({isAuth, setAlert}) {
       if(title.length!==0&&post.length!==0&&imageUpload!==""&&blogTag!==""){
         setAlert("Blog is being added", "info");
         await uploadImage();
-        const blogApi="http://localhost:3000/blog/addBlog";
+        const blogApi="https://oneshot-backend.onrender.com/blog/addBlog";
 
         const jsonData={
           "userId": userData._id,

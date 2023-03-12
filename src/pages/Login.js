@@ -30,7 +30,7 @@ export default function Login({isAuth, setIsAuth, setAlert}) {
   }
 
   const addUserDataToDb = async()=> {
-    const blogApi="http://localhost:3000/auth/register";
+    const blogApi="https://oneshot-backend.onrender.com/auth/register";
 
     const jsonData={ 
       "userName": auth.currentUser.displayName,

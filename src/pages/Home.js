@@ -13,7 +13,7 @@ export default function Home({isAuth}) {
       navigate('/login');
     }
     const getBlogs = async()=>{
-      let blogApi = `http://localhost:3000/blog/getBlogs`;
+      let blogApi = `https://oneshot-backend.onrender.com/blog/getBlogs`;
       let blogsData = await fetch(blogApi);
       let jsonBlogsData = await blogsData.json();
       setBlogs(jsonBlogsData);
