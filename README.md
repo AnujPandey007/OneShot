@@ -16,9 +16,11 @@ Storing the images of post using Firebase Storage.
 ## Screenshots
 
 <p float="left">
-  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/home_page.png" width="500"/>
-  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/add_blog.png" width="500"/>
-  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/read_blog.png" width="500"/>
+  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/home_page.png" width="700"/>
+
+  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/add_blog.png" width="700"/>
+  
+  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/read_blog.png" width="700"/>
 </p>
 
 ## Video
