@@ -11,7 +11,7 @@ export default function AddPost({isAuth, setAlert}) {
 
   const [title, setTitle] = React.useState("");
   const [post, setPost] = React.useState("");
-  const [blogTag, setBlogTag] = React.useState('');
+  const [blogTag, setBlogTag] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
   const [imageUpload, setImageUpload] = React.useState("");
@@ -53,7 +53,7 @@ export default function AddPost({isAuth, setAlert}) {
   const addBlog = async()=>{
     setIsLoading(true);
     try{
-      if(title.length!==0&&post.length!==0&&imageUpload!==""){
+      if(title.length!==0&&post.length!==0&&imageUpload!==""&&blogTag!==""){
         setAlert("Blog is being added", "info");
         await uploadImage();
         const blogApi="http://localhost:3000/blog/addBlog";
@@ -111,14 +111,15 @@ export default function AddPost({isAuth, setAlert}) {
           <label htmlFor="" className="mb-3 block text-base font-medium text-black">
           Select Tag
           </label>
-          <select defaultValue={blogTag} onChange={handleBlogTag}  className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none">
-              <option>Entertainment</option>
-              <option>Sports</option>
-              <option>Food</option>
-              <option>Travel</option>
-              <option>Fashion</option>
-              <option>Photography</option>
-              <option>Science</option>
+          <select defaultValue={blogTag} onChange={handleBlogTag} className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none">
+            <option value={""} disabled={true}>Select here...</option>
+            <option>Entertainment</option>
+            <option>Sports</option>
+            <option>Food</option>
+            <option>Travel</option>
+            <option>Fashion</option>
+            <option>Photography</option>
+            <option>Science</option>
           </select>
         </div>
         
