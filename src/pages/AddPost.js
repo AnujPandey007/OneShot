@@ -11,7 +11,8 @@ export default function AddPost({isAuth, setAlert}) {
 
   const [title, setTitle] = React.useState("");
   const [post, setPost] = React.useState("");
-  const [blogTag, setBlogTag] = React.useState('')
+  const [blogTag, setBlogTag] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const [imageUpload, setImageUpload] = React.useState("");
   let imageUrl = "";
@@ -50,8 +51,9 @@ export default function AddPost({isAuth, setAlert}) {
   }
 
   const addBlog = async()=>{
+    setIsLoading(true);
     try{
-      if(title.length!==0&&post.length!==0){
+      if(title.length!==0&&post.length!==0&&imageUpload!==""){
         setAlert("Blog is being added", "info");
         await uploadImage();
         const blogApi="http://localhost:3000/blog/addBlog";
@@ -85,6 +87,7 @@ export default function AddPost({isAuth, setAlert}) {
     }catch(e){
       console.log(e);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -104,14 +107,18 @@ export default function AddPost({isAuth, setAlert}) {
           </div>
         </div>
 
-        <div className='pb-4'>
-          <select className="form-select"  defaultValue={blogTag} onChange={handleBlogTag} id="validationCustom05" required>
-            <option value={""} disabled={true}>Select Tag</option>
-            <option value={"Hindi"}>Hindi</option>
-            <option value={"English"}>English</option>
-            <option value={"Mathematics"}>Mathematics</option>
-            <option value={"Geography"}>Geography</option>
-            <option value={"Science"}>Science</option>  
+        <div className="w-full px-4 mb-5">
+          <label htmlFor="" className="mb-3 block text-base font-medium text-black">
+          Select Tag
+          </label>
+          <select defaultValue={blogTag} onChange={handleBlogTag}  className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none">
+              <option>Entertainment</option>
+              <option>Sports</option>
+              <option>Food</option>
+              <option>Travel</option>
+              <option>Fashion</option>
+              <option>Photography</option>
+              <option>Science</option>
           </select>
         </div>
         
@@ -129,7 +136,7 @@ export default function AddPost({isAuth, setAlert}) {
           </div>
         </div>
 
-        <div className="w-full px-4 ">
+        {/* <div className="w-full px-4 ">
           <div className="mb-5">
             <label className="mb-3 block text-base font-medium text-black">
             Upload Image
@@ -149,9 +156,19 @@ export default function AddPost({isAuth, setAlert}) {
                 </label>
             </div>
           </div>
+        </div> */}
+        
+        <div className="w-full px-4">
+          <div className="mb-12">
+            <label htmlFor="" className="mb-3 block text-base font-medium text-black">
+              Upload Image
+            </label>
+            <input type="file" accept="image/*" onChange={handleImage} className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"/>
+          </div>
         </div>
+
         <div className='pl-4'>
-          <button type="button" onClick={addBlog} className="text-white bg-black hover:bg-black focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+          <button type="button" disabled={isLoading} onClick={addBlog} className="text-white bg-black hover:bg-black focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
         </div>
       </div>
     </>
