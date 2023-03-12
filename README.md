@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+# OneShot Blog
+It is a blog web app based on Mongodb, ExpressJs, ReactJs and Nodejs - MERN Stack with firebase for google authentication and firebase storage for storing images. We can create our own blogs, read other's post and blogs can be deleted by the admin.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Live Link
+https://fascinating-crisp-2cdc03.netlify.app 
 
-## Available Scripts
+## Authentication
+Implemented login and register with Google Authentication using Firebase Authentication.
 
-In the project directory, you can run:
+## Database
+Used Mongodb Database for the storing the user and post data.
 
-### `npm start`
+## Storage
+Storing the images of post using Firebase Storage.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Screenshots
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<p float="left">
+  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/home_page.png" width="300"/>
+  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/add_blog.png" width="300"/>
+  <img src="https://raw.githubusercontent.com/AnujPandey007/OneShot/master/screenshots/read_blog.png" width="300"/>
+</p>
 
-### `npm test`
+## Video
+https://drive.google.com/file/d/1QhO3qG82oDi7dd3mMwz10pA4rKgSD2Ly/view?usp=share_link
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Ways to run the project 
 
-### `npm run build`
+➔ Clone my project from GitHub.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+➔ Then install vscode, react (npm and nodejs) and configure the system.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+➔ Open the current directory in the vscode and run project by npm start command.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Backend
+https://github.com/AnujPandey007/OneShot-backend
