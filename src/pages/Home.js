@@ -75,8 +75,8 @@ export default function Home({isAuth}) {
             {blogs.map((doc)=> {
               return (<div key={doc._id} className="w-full px-4 md:w-1/2 lg:w-1/3">
               <Link to={`/getpost/${doc._id}`}>
-                  <div className="mx-auto mb-10 max-w-[370px]">
-                    <div className="mb-8 overflow-hidden rounded w-96 h-60">
+                  <div className="mx-auto mb-10 mt-10 max-w-[370px] p-2">
+                    <div className="mb-8 overflow-hidden rounded ">
                       <img
                         src={doc.blogImage}
                         alt={doc._id}
