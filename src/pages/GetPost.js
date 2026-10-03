@@ -96,7 +96,7 @@ export default function GetPost({isAuth, setAlert}) {
               <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">{blog.blogTitle}</h1>
             </header>
             
-           <img src={blog.blogImage} alt={blog._id}/>
+           {blog.blogImage && (<img src={blog.blogImage} alt={blog._id}onError={event => { event.currentTarget.style.display = "none"; }} />)}
 
             <div className='mt-4 first-letter:text-4xl first-letter:font-bold'>
                 {blog.blogText}

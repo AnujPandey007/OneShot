@@ -77,11 +77,11 @@ export default function Home({isAuth}) {
               <Link to={`/getpost/${doc._id}`}>
                   <div className="mx-auto mb-10 mt-10 max-w-[370px] p-2">
                     <div className="mb-8 overflow-hidden rounded ">
-                      <img
+                      {doc.blogImage && (<img
                         src={doc.blogImage}
                         alt={doc._id}
                         className="w-full"
-                      />
+                      onError={event => { event.currentTarget.style.display = "none"; }} />)}
                     </div>
                     <div>
                       <div className='flex flex-row items-end place-content-between	mb-4'>

@@ -68,7 +68,9 @@ export default function AddPost({isAuth, setAlert}) {
   };
 
   const [imageUpload, setImageUpload] = React.useState("");
-  let imageUrl = "";
+  const [includeImage, setIncludeImage] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState("");
+  const submitting = React.useRef(false);
 
   React.useEffect(() => {
     if(!isAuth){
@@ -97,55 +99,69 @@ export default function AddPost({isAuth, setAlert}) {
     setImageUpload(event.target.files[0]);
   }
 
-  const uploadImage = async()=> {
-    if(imageUpload!==""){
-      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-      const result = await uploadBytes(imageRef, imageUpload);
-      const imgUrl = await getDownloadURL(result.ref);
-      imageUrl = imgUrl;
+  const addBlog = async () => {
+    if (submitting.current) return;
+    setSubmitError("");
+    if (!title.trim() || !post.trim() || !blogTag) {
+      setSubmitError("Please enter a title, description, and tag. An image is optional.");
+      return;
     }
-  }
-
-  const addBlog = async()=>{
+    if (!auth.currentUser || !userData?._id) {
+      setSubmitError("Your account is still loading. Please try again or sign in again.");
+      return;
+    }
+    if (includeImage && !imageUpload) {
+      setSubmitError("Choose an image or uncheck Include an image to publish without one.");
+      return;
+    }
     invalidatePrediction();
+    submitting.current = true;
     setIsLoading(true);
-    try{
-      if(title.length!==0&&post.length!==0&&imageUpload!==""&&blogTag!==""){
-        setAlert("Blog is being added", "info");
-        await uploadImage();
-        const blogApi="https://oneshot-backend.onrender.com/blog/addBlog";
-
-        const jsonData={
-          "userId": userData._id,
-          "userName": auth.currentUser.displayName,
-          "userImage": auth.currentUser.photoURL,
-          "blogTitle": title,
-          "blogText": post,
-          "blogImage": imageUrl,
-          "likes": 1,
-          "blogTag": blogTag
+    try {
+      let imageUrl = "";
+      if (includeImage) {
+        setAlert("Uploading image…", "info");
+        try {
+          const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+          const uploaded = await uploadBytes(imageRef, imageUpload);
+          imageUrl = await getDownloadURL(uploaded.ref);
+        } catch (error) {
+          throw new Error("Image upload failed. Uncheck Include an image to publish without it, or check your storage configuration.");
         }
-        
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(jsonData)
-        };
-        
-        const blogData = await fetch(blogApi, requestOptions);
-        let jsonBlogData = await blogData.json();
-        console.log(jsonBlogData);
-      
-        setAlert("Your post is uploaded.", "success");
-        navigate('/');
-      }else{
-        setAlert("Please Fill Up All The Forms", "danger");
       }
-    }catch(e){
-      console.log(e);
+      setAlert("Saving your post…", "info");
+      const response = await fetch("https://oneshot-backend.onrender.com/blog/addBlog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userData._id,
+          userName: auth.currentUser.displayName,
+          userImage: auth.currentUser.photoURL,
+          blogTitle: title.trim(),
+          blogText: post.trim(),
+          blogImage: imageUrl,
+          likes: 1,
+          blogTag,
+        }),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) {
+        const detail = typeof result === "string" ? result : result?.message || result?.error;
+        throw new Error(typeof detail === "string" ? detail : `Could not save your post (${response.status}). Please try again.`);
+      }
+      if (!result?._id) {
+        throw new Error("The server did not confirm that your post was saved. Check your posts before trying again.");
+      }
+      setAlert("Your post is uploaded.", "success");
+      navigate('/');
+    } catch (error) {
+      setSubmitError(error.message || "Could not save your post. Please try again.");
+      setAlert("Your post could not be saved. See the message below the form.", "danger");
+    } finally {
+      submitting.current = false;
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }
+  };
 
   return (
     <>
@@ -198,12 +214,18 @@ export default function AddPost({isAuth, setAlert}) {
         <div className="w-full px-4">
           <div className="mb-12">
             <label htmlFor="" className="mb-3 block text-base font-medium text-black">
-              Upload Image
+              <input type="checkbox" checked={includeImage} disabled={isLoading}
+                onChange={event => { setIncludeImage(event.target.checked); setSubmitError(""); }} />
+              {" "}Include an image (optional)
             </label>
-            <input type="file" accept="image/*" onChange={handleImage} className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"/>
+            <input aria-label="Upload image" disabled={!includeImage || isLoading} type="file" accept="image/*" onChange={handleImage} className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"/>
           </div>
         </div>
 
+        <div className="w-full px-4 mb-4">
+          <p className="text-sm text-gray-600">Leave the image option unchecked to publish a text-only post.</p>
+          {submitError && <p role="alert" className="mt-2 text-red-600">{submitError}</p>}
+        </div>
         <div className='pl-4'>
           <button type="button" disabled={isLoading || isPredicting} onClick={addBlog} className="text-white bg-black hover:bg-black focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
         </div>
