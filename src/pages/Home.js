@@ -48,7 +48,7 @@ export default function Home({isAuth}) {
 
   return (
     <>
-      <button onClick={addBlog} title="Add Blog" className="fixed z-90 bottom-10 right-8 bg-black w-14 h-14 rounded-full drop-shadow-lg flex justify-center items-center text-white text-s">
+      <button onClick={addBlog} title="Add Blog" className="fixed z-50 bottom-10 right-8 bg-black w-14 h-14 rounded-full drop-shadow-lg flex justify-center items-center text-white text-s">
         &#65291;
       </button>
       
@@ -56,7 +56,7 @@ export default function Home({isAuth}) {
         <div className="container mx-auto">
           <div className="-mx-4 flex flex-wrap justify-center">
             <div className="w-full px-4">
-              <div className="mx-auto mb-[60px] max-w-[510px] text-center lg:mb-20">
+              <div className="mx-auto mb-8 max-w-[510px] text-center">
                 <span className="text-primary mb-2 block text-lg font-semibold">
                   ONESHOT
                 </span>
@@ -71,20 +71,23 @@ export default function Home({isAuth}) {
               </div>
             </div>
           </div>
-          <div className="-mx-4 flex flex-wrap">
+          <div className="columns-1 gap-8 px-4 md:columns-2 lg:columns-3">
             {blogs.map((doc)=> {
-              return (<div key={doc._id} className="w-full px-4 md:w-1/2 lg:w-1/3">
-              <Link to={`/getpost/${doc._id}`}>
-                  <div className="mx-auto mb-10 mt-10 max-w-[370px] p-2">
-                    <div className="mb-8 overflow-hidden rounded ">
-                      {doc.blogImage && (<img
-                        src={doc.blogImage}
-                        alt={doc._id}
-                        className="w-full"
-                      onError={event => { event.currentTarget.style.display = "none"; }} />)}
-                    </div>
+              return (<div key={doc._id} className="mb-8 inline-block w-full break-inside-avoid align-top">
+              <Link to={`/getpost/${doc._id}`} className="block">
+                  <div className="w-full">
+                    {doc.blogImage && (
+                      <div className="mb-4 overflow-hidden rounded">
+                        <img
+                          src={doc.blogImage}
+                          alt={doc.blogTitle}
+                          className="h-52 w-full object-cover"
+                          onError={event => { event.currentTarget.parentElement.style.display = "none"; }}
+                        />
+                      </div>
+                    )}
                     <div>
-                      <div className='flex flex-row items-end place-content-between	mb-4'>
+                      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                         <div className='flex flex-row items-center'>
                             <div className="w-6 h-6 mr-1">
                               <img src={doc.userImage} alt={doc.userId} className="shadow-lg rounded max-w-full h-auto align-middle border-none"/>
@@ -93,17 +96,17 @@ export default function Home({isAuth}) {
                                 {doc.userName}
                             </div>
                         </div>
-                        <span className="bg-primary inline-block rounded px-4 text-center text-xs font-semibold leading-loose text-black">
+                        <span className="text-xs leading-relaxed text-gray-500">
                           {new Date(doc.blogTime).toLocaleString()}
                         </span>
                       </div>
                       <h3>
-                        <div className="text-dark hover:text-primary mb-4 inline-block text-xl font-semibold sm:text-2xl lg:text-xl xl:text-2xl">
+                        <div className="text-dark hover:text-primary mb-3 break-words inline-block text-xl font-semibold sm:text-2xl lg:text-xl xl:text-2xl">
                           {doc.blogTitle}
                         </div>
                       </h3>
-                      <p className="text-body-color text-base">
-                        {doc.blogText.substr(0, 200) + "...."}
+                      <p className="text-body-color break-words text-base leading-relaxed">
+                        {doc.blogText.length > 200 ? doc.blogText.slice(0, 200) + "…" : doc.blogText}
                       </p>
                     </div>
                   </div>
