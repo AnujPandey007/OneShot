@@ -1,5 +1,4 @@
 import React from 'react';
-import { BLOG_TAGS, predictBlogTag } from '../pages/tagApi';
 import { useNavigate } from 'react-router-dom';
 import { storage, auth } from '../config/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -14,58 +13,6 @@ export default function AddPost({isAuth, setAlert}) {
   const [post, setPost] = React.useState("");
   const [blogTag, setBlogTag] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isPredicting, setIsPredicting] = React.useState(false);
-  const [tagMessage, setTagMessage] = React.useState("");
-  const predictionRequest = React.useRef(null);
-  const editVersion = React.useRef(0);
-
-  React.useEffect(() => () => predictionRequest.current?.abort(), []);
-
-  const invalidatePrediction = () => {
-    editVersion.current += 1;
-    predictionRequest.current?.abort();
-    predictionRequest.current = null;
-    setIsPredicting(false);
-    setTagMessage("");
-  };
-
-  const suggestTag = async () => {
-    if (post.trim().length < 20) {
-      setTagMessage("Write at least 20 characters in your description first.");
-      return;
-    }
-    predictionRequest.current?.abort();
-    const controller = new AbortController();
-    predictionRequest.current = controller;
-    const version = editVersion.current;
-    const timeout = setTimeout(() => controller.abort(), 90000);
-    setIsPredicting(true);
-    setTagMessage("Finding a tag… The service may take a minute to wake up.");
-    try {
-      const result = await predictBlogTag({ blogTitle: title, blogText: post }, controller.signal);
-      if (version !== editVersion.current || predictionRequest.current !== controller) return;
-      if (!result.blogTag) {
-        setTagMessage("No suitable tag found. Please select one manually.");
-        return;
-      }
-      setBlogTag(result.blogTag);
-      setTagMessage(result.demo
-        ? `Demo model suggests ${result.blogTag}. Please check it before submitting.`
-        : `Suggested ${result.blogTag}.${result.needsReview ? " Please review this uncertain suggestion." : " You can change it before submitting."}`);
-    } catch (error) {
-      if (version === editVersion.current && predictionRequest.current === controller) {
-        setTagMessage(error.name === "AbortError"
-          ? "The service took too long. Try again or select a tag manually."
-          : error.message);
-      }
-    } finally {
-      clearTimeout(timeout);
-      if (predictionRequest.current === controller) {
-        predictionRequest.current = null;
-        setIsPredicting(false);
-      }
-    }
-  };
 
   const [imageUpload, setImageUpload] = React.useState("");
   let imageUrl = "";
@@ -79,17 +26,14 @@ export default function AddPost({isAuth, setAlert}) {
 
 
   const handleTitle = (event)=>{
-    invalidatePrediction();
     setTitle(event.target.value);
   }
 
   const handleBlogTag=(event)=>{
-    invalidatePrediction();
     setBlogTag(event.target.value)
   }
 
   const handlePost = (event)=>{
-    invalidatePrediction();
     setPost(event.target.value);
   }
 
@@ -107,7 +51,6 @@ export default function AddPost({isAuth, setAlert}) {
   }
 
   const addBlog = async()=>{
-    invalidatePrediction();
     setIsLoading(true);
     try{
       if(title.length!==0&&post.length!==0&&imageUpload!==""&&blogTag!==""){
@@ -168,15 +111,16 @@ export default function AddPost({isAuth, setAlert}) {
           <label htmlFor="" className="mb-3 block text-base font-medium text-black">
           Select Tag
           </label>
-          <select aria-label="Blog tag" value={blogTag} onChange={handleBlogTag} className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none">
+          <select defaultValue={blogTag} onChange={handleBlogTag} className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none">
             <option value={""} disabled={true}>Select here...</option>
-            {BLOG_TAGS.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+            <option>Entertainment</option>
+            <option>Sports</option>
+            <option>Food</option>
+            <option>Travel</option>
+            <option>Fashion</option>
+            <option>Photography</option>
+            <option>Science</option>
           </select>
-          <button type="button" onClick={suggestTag} disabled={isPredicting || isLoading || post.trim().length < 20}
-            className="mt-3 rounded-lg bg-black px-4 py-2 text-white disabled:opacity-50">
-            {isPredicting ? "Predicting…" : "Suggest tag with AI"}
-          </button>
-          <p role="status" aria-live="polite" className="mt-2 text-sm text-gray-600">{tagMessage}</p>
         </div>
         
         <div className="w-full px-4 ">
@@ -193,7 +137,27 @@ export default function AddPost({isAuth, setAlert}) {
           </div>
         </div>
 
-
+        {/* <div className="w-full px-4 ">
+          <div className="mb-5">
+            <label className="mb-3 block text-base font-medium text-black">
+            Upload Image
+            </label>
+            <div className="relative">
+                <label htmlFor="file" className="flex min-h-[175px] w-full cursor-pointer items-center justify-center rounded-md border border-dashed border-primary p-6">
+                  <div>
+                      <input type="file" name="file" id="file" className="sr-only/" accept="image/*" onChange={handleImage}/>
+                      <span className="mx-auto mb-3 flex h-[50px] w-[50px] items-center justify-center rounded-full border border-stroke bg-white">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" clipRule="evenodd" d="M2.5013 11.666C2.96154 11.666 3.33464 12.0391 3.33464 12.4993V15.8327C3.33464 16.0537 3.42243 16.2657 3.57871 16.4219C3.73499 16.5782 3.94695 16.666 4.16797 16.666H15.8346C16.0556 16.666 16.2676 16.5782 16.4239 16.4219C16.5802 16.2657 16.668 16.0537 16.668 15.8327V12.4993C16.668 12.0391 17.0411 11.666 17.5013 11.666C17.9615 11.666 18.3346 12.0391 18.3346 12.4993V15.8327C18.3346 16.4957 18.0712 17.1316 17.6024 17.6004C17.1336 18.0693 16.4977 18.3327 15.8346 18.3327H4.16797C3.50493 18.3327 2.86904 18.0693 2.4002 17.6004C1.93136 17.1316 1.66797 16.4957 1.66797 15.8327V12.4993C1.66797 12.0391 2.04106 11.666 2.5013 11.666Z" fill="#3056D3"></path>
+                            <path fillRule="evenodd" clipRule="evenodd" d="M9.41074 1.91009C9.73618 1.58466 10.2638 1.58466 10.5893 1.91009L14.7559 6.07676C15.0814 6.4022 15.0814 6.92984 14.7559 7.25527C14.4305 7.58071 13.9028 7.58071 13.5774 7.25527L10 3.67786L6.42259 7.25527C6.09715 7.58071 5.56951 7.58071 5.24408 7.25527C4.91864 6.92984 4.91864 6.4022 5.24408 6.07676L9.41074 1.91009Z" fill="#3056D3"></path>
+                            <path fillRule="evenodd" clipRule="evenodd" d="M10.0013 1.66602C10.4615 1.66602 10.8346 2.03911 10.8346 2.49935V12.4994C10.8346 12.9596 10.4615 13.3327 10.0013 13.3327C9.54106 13.3327 9.16797 12.9596 9.16797 12.4994V2.49935C9.16797 2.03911 9.54106 1.66602 10.0013 1.66602Z" fill="#3056D3"></path>
+                        </svg>
+                      </span>
+                  </div>
+                </label>
+            </div>
+          </div>
+        </div> */}
         
         <div className="w-full px-4">
           <div className="mb-12">
@@ -205,7 +169,7 @@ export default function AddPost({isAuth, setAlert}) {
         </div>
 
         <div className='pl-4'>
-          <button type="button" disabled={isLoading || isPredicting} onClick={addBlog} className="text-white bg-black hover:bg-black focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+          <button type="button" disabled={isLoading} onClick={addBlog} className="text-white bg-black hover:bg-black focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
         </div>
       </div>
     </>

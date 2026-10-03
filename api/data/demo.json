@@ -1,0 +1,107 @@
+[
+  {
+    "blogTitle": "Entertainment example 1",
+    "blogText": "Movie review cinema actors film director soundtrack",
+    "blogTag": "Entertainment"
+  },
+  {
+    "blogTitle": "Entertainment example 2",
+    "blogText": "Music concert singer album audience live performance",
+    "blogTag": "Entertainment"
+  },
+  {
+    "blogTitle": "Entertainment example 3",
+    "blogText": "Television drama series comedy episode streaming",
+    "blogTag": "Entertainment"
+  },
+  {
+    "blogTitle": "Sports example 1",
+    "blogText": "Cricket match team batsman bowler tournament wicket",
+    "blogTag": "Sports"
+  },
+  {
+    "blogTitle": "Sports example 2",
+    "blogText": "Football player goal league coach stadium match",
+    "blogTag": "Sports"
+  },
+  {
+    "blogTitle": "Sports example 3",
+    "blogText": "Tennis player court serve championship tournament",
+    "blogTag": "Sports"
+  },
+  {
+    "blogTitle": "Food example 1",
+    "blogText": "Pasta recipe cooking sauce ingredients kitchen delicious",
+    "blogTag": "Food"
+  },
+  {
+    "blogTitle": "Food example 2",
+    "blogText": "Bake chocolate cake dessert oven sugar butter",
+    "blogTag": "Food"
+  },
+  {
+    "blogTitle": "Food example 3",
+    "blogText": "Restaurant meal spicy curry rice vegetables recipe",
+    "blogTag": "Food"
+  },
+  {
+    "blogTitle": "Travel example 1",
+    "blogText": "Travel trip holiday itinerary hotel destination tourists",
+    "blogTag": "Travel"
+  },
+  {
+    "blogTitle": "Travel example 2",
+    "blogText": "Mountain vacation hiking journey backpack guide campsite",
+    "blogTag": "Travel"
+  },
+  {
+    "blogTitle": "Travel example 3",
+    "blogText": "Beach island travel flight sightseeing destination holiday",
+    "blogTag": "Travel"
+  },
+  {
+    "blogTitle": "Fashion example 1",
+    "blogText": "Fashion style outfit clothing designer runway dress",
+    "blogTag": "Fashion"
+  },
+  {
+    "blogTitle": "Fashion example 2",
+    "blogText": "Wardrobe clothes trends jacket shoes accessories fashion",
+    "blogTag": "Fashion"
+  },
+  {
+    "blogTitle": "Fashion example 3",
+    "blogText": "Designer collection fabrics dress style clothing runway",
+    "blogTag": "Fashion"
+  },
+  {
+    "blogTitle": "Photography example 1",
+    "blogText": "Photography camera lens shutter aperture portrait exposure",
+    "blogTag": "Photography"
+  },
+  {
+    "blogTitle": "Photography example 2",
+    "blogText": "Landscape photo composition tripod camera photography light",
+    "blogTag": "Photography"
+  },
+  {
+    "blogTitle": "Photography example 3",
+    "blogText": "Photographer portrait lens lighting image camera editing",
+    "blogTag": "Photography"
+  },
+  {
+    "blogTitle": "Science example 1",
+    "blogText": "Science physics experiment laboratory quantum research",
+    "blogTag": "Science"
+  },
+  {
+    "blogTitle": "Science example 2",
+    "blogText": "Biology cells genetics evolution scientist research experiment",
+    "blogTag": "Science"
+  },
+  {
+    "blogTitle": "Science example 3",
+    "blogText": "Astronomy planets space telescope discovery science universe",
+    "blogTag": "Science"
+  }
+]
