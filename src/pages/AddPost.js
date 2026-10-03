@@ -1,9 +1,8 @@
 import React from 'react';
 import { BLOG_TAGS, predictBlogTag } from '../pages/tagApi';
 import { useNavigate } from 'react-router-dom';
-import { storage, auth } from '../config/firebaseConfig';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { v4 } from 'uuid';
+import { auth } from '../config/firebaseConfig';
+import { BLOG_API_URL, uploadBlogImage } from '../services/cloudinaryUpload';
 import { useUser } from '../context/userContext';
 
 export default function AddPost({isAuth, setAlert}) {
@@ -122,15 +121,13 @@ export default function AddPost({isAuth, setAlert}) {
       if (includeImage) {
         setAlert("Uploading image…", "info");
         try {
-          const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-          const uploaded = await uploadBytes(imageRef, imageUpload);
-          imageUrl = await getDownloadURL(uploaded.ref);
+          imageUrl = await uploadBlogImage(imageUpload);
         } catch (error) {
-          throw new Error("Image upload failed. Uncheck Include an image to publish without it, or check your storage configuration.");
+          throw new Error(`${error.message} You can uncheck Include an image to publish without it.`);
         }
       }
       setAlert("Saving your post…", "info");
-      const response = await fetch("https://oneshot-backend.onrender.com/blog/addBlog", {
+      const response = await fetch(`${BLOG_API_URL}/blog/addBlog`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -218,12 +215,12 @@ export default function AddPost({isAuth, setAlert}) {
                 onChange={event => { setIncludeImage(event.target.checked); setSubmitError(""); }} />
               {" "}Include an image (optional)
             </label>
-            <input aria-label="Upload image" disabled={!includeImage || isLoading} type="file" accept="image/*" onChange={handleImage} className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"/>
+            <input aria-label="Upload image" disabled={!includeImage || isLoading} type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImage} className="border-form-stroke text-body-color placeholder-body-color focus:border-primary active:border-primary file:border-form-stroke file:text-body-color file:hover:bg-primary w-full cursor-pointer rounded-lg border-[1.5px] font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:bg-[#F5F7FD] file:py-3 file:px-5 file:hover:bg-opacity-10 disabled:cursor-default disabled:bg-[#F5F7FD]"/>
           </div>
         </div>
 
         <div className="w-full px-4 mb-4">
-          <p className="text-sm text-gray-600">Leave the image option unchecked to publish a text-only post.</p>
+          <p className="text-sm text-gray-600">Images: JPG, PNG, or WebP up to 5 MB. Leave the image option unchecked to publish a text-only post.</p>
           {submitError && <p role="alert" className="mt-2 text-red-600">{submitError}</p>}
         </div>
         <div className='pl-4'>
